@@ -1,0 +1,61 @@
+**Initial Project Structure after Tomcat Server Integration**
+ChatApp:
+├─resource
+│  ├─css
+│  │   styler.css
+│  │
+│  ├─data
+│  │   chats.json
+│  │   emoji.json
+│  │   users.json
+│  │
+│  ├─images
+│  │   clean.ico
+│  │   cr.png
+│  │   favicon.ico
+│  │   logout.png
+│  │   refresh.png
+│  │   wipe.png
+│  │
+│  └─js
+│      jqsm.js
+│      loader.js
+│      user.js
+├─src
+├─WEB-INF
+  │  web.xml
+  │
+  │
+  ├─jsp
+  │  client.jsp
+  │  error.jsp
+  │  login.jsp
+  │      
+  ├─lib
+  │  java-json.jar
+  │  jstl-1.2.jar
+  │      
+  └─src
+      └─org
+          └─jd
+              └─ca
+                  ├─beans
+                  │      MessageBean.java
+                  │      RecieverInfoBean.java
+                  │      UserInfo.java
+                  │      
+                  ├─process
+                  │      CommonProcessor.java
+                  │      GetRequestProcessor.java
+                  │      PostRequestProcessor.java
+                  │      
+                  ├─resources
+                  │      CommonResources.java
+                  │      GlobalResources.java
+                  │      
+                  └─servlet
+                          ChatServlet.java
+                          ErrorHandlerServlet.java
+                          EventControlServlet.java
+                          InitServlet.java
+                          WebWrokerServlet.java
