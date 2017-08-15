@@ -1,4 +1,4 @@
-package com.joy.gca.beans;
+package org.joy.ca.beans;
 
 
 public class UserInfo {
