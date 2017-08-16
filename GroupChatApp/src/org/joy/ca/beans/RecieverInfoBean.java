@@ -1,5 +1,11 @@
 package org.joy.ca.beans;
 
+/**
+ * Data representation for chat window
+ *
+ * @author Joydeep Dey
+ *
+ */
 public class RecieverInfoBean {
 
 	private Long messageId;
