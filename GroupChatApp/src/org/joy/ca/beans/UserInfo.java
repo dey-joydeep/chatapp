@@ -1,6 +1,11 @@
 package org.joy.ca.beans;
 
-
+/**
+ * Holds the basic details of logged in users
+ *
+ * @author Joydeep Dey
+ *
+ */
 public class UserInfo {
 
 	private String username;
