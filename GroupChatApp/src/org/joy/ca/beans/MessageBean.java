@@ -1,5 +1,11 @@
 package org.joy.ca.beans;
 
+/**
+ * This class is used to hold contents when a message is sent by a user
+ *
+ * @author Joydeep Dey
+ *
+ */
 public class MessageBean {
 
 	private String senderName;
