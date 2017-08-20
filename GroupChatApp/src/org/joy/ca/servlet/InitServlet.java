@@ -33,11 +33,11 @@ public class InitServlet extends HttpServlet {
 		// TODO: To be removed. All resources will be loaded from DB or handling
 		// method must be improved (Only in case of EMOJIs).
 		if (GlobalResources.RESOURCE_PATH_MAP.isEmpty()) {
-			File[] files = new File(config.getServletContext().getRealPath(
-					"/resource/data")).listFiles();
-			for (File f : files)
-				GlobalResources.RESOURCE_PATH_MAP.put(f.getName(),
-						f.getAbsolutePath());
+			File file = new File(config.getServletContext().getRealPath("/data"));
+			File[] files = file.listFiles();
+			if (files != null)
+				for (File f : files)
+					GlobalResources.RESOURCE_PATH_MAP.put(f.getName(), f.getAbsolutePath());
 		}
 
 		super.init(config);
@@ -47,8 +47,7 @@ public class InitServlet extends HttpServlet {
 	 * Called from web.xml>welcome file. Redirect to login page
 	 */
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher(CommonResources.LOGIN_PAGE).forward(req, resp);
 	}
 
@@ -56,8 +55,7 @@ public class InitServlet extends HttpServlet {
 	 * Process the login request(AJAX request) and return the result
 	 */
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		PostRequestProcessor processor = new PostRequestProcessor();
 		String response = processor.login(req);
 		PrintWriter writer = resp.getWriter();

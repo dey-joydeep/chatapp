@@ -22,31 +22,29 @@ import org.joy.ca.resources.CommonResources;
  * @author Joydeep Dey
  *
  */
-@WebServlet(name = "/send", asyncSupported = true)
+@WebServlet(urlPatterns = "/send", asyncSupported = true)
 public class EventControlServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		HttpSession session = req.getSession(false);
-		Map<String, String> formData = CommonProcessor.getRequestBody(req
-				.getInputStream());
+		Map<String, String> formData = CommonProcessor.getRequestBody(req.getInputStream());
 		String token = formData.get("token");
 		String response = CommonResources.RESPONSE_ERROR;
 
-		if (CommonProcessor.checkLoggedInUserByToken(token,
-				session.getAttribute("token"))) {
+		if (CommonProcessor.checkLoggedInUserByToken(token, session.getAttribute("token"))) {
 			PostRequestProcessor processor = new PostRequestProcessor();
-			int eventId = Integer.parseInt(formData.get("sendId"));
+			int eventId = Integer.parseInt(formData.get("eventId"));
 
 			switch (eventId) {
 			case 1:
 				// Write new chat message to JSON file (to be changed in DB)
-				response = processor
-						.writeMessage(formData, req.getRemoteHost());
+				int loginId = Integer.parseInt(formData.get("loginId"));
+				String message = formData.get("message");
+				response = processor.writeMessage(loginId, message, req.getRemoteHost());
 				break;
 			case 2:
 				// Execute Logout

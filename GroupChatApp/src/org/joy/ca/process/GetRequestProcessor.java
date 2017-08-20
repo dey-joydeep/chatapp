@@ -1,12 +1,19 @@
 package org.joy.ca.process;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joy.ca.beans.MessageBean;
 import org.joy.ca.beans.RecieverInfoBean;
 import org.joy.ca.beans.UserInfo;
+import org.joy.ca.db.entity.table.EmojiEntity;
+import org.joy.ca.db.entity.view.UserInfoView;
+import org.joy.ca.db.service.EmojiService;
+import org.joy.ca.db.service.EmojiServiceImpl;
+import org.joy.ca.db.service.UserInfoService;
+import org.joy.ca.db.service.UserInfoServiceImpl;
 import org.joy.ca.resources.CommonResources;
 import org.joy.ca.resources.GlobalResources;
 import org.json.JSONArray;
@@ -36,7 +43,7 @@ public class GetRequestProcessor extends GlobalResources {
 			for (UserInfo info : USER_LIST) {
 				if (!info.getToken().equals(token)) {
 					object = new JSONObject();
-					object.put("uname", info.getUsername());
+					object.put("loginId", info.getLoginId());
 					object.put("rname", info.getRealName());
 					array.put(object);
 				}
@@ -56,29 +63,21 @@ public class GetRequestProcessor extends GlobalResources {
 	 * @param token
 	 * @return
 	 */
-	public String getAllUsers(String token) {
+	public String getAllFriends(int loginId) {
+
+		UserInfoService service = new UserInfoServiceImpl();
+		List<UserInfoView> friendList = service.getFriendList(loginId);
 
 		try {
 			JSONObject object = null;
-			JSONObject newData = null;
 			JSONArray array = new JSONArray();
-			String credentials = CommonProcessor
-					.getResource(CommonResources.CREDENTIAL_DATA);
-			UserInfo info = CommonProcessor.getUserDetailsByToken(token);
-			JSONArray jsonArray = new JSONArray(credentials);
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				object = new JSONObject(jsonArray.get(i).toString());
-				String uname = object.getString("username");
-				if (!uname.equals(info.getUsername())) {
-					newData = new JSONObject();
-					newData.put("uname", uname);
-					newData.put("rname", object.get("name"));
-					array.put(newData);
-				}
+			for (UserInfoView userInfo : friendList) {
+				object = new JSONObject(userInfo);
+				array.put(object);
 			}
 			return array.toString();
-		} catch (JSONException | IOException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 			return CommonResources.RESPONSE_ERROR;
 		}
@@ -98,8 +97,7 @@ public class GetRequestProcessor extends GlobalResources {
 			if (!chats.isEmpty()) {
 				JSONArray jsonArray = new JSONArray(chats);
 
-				JSONObject object = jsonArray
-						.getJSONObject(jsonArray.length() - 1);
+				JSONObject object = jsonArray.getJSONObject(jsonArray.length() - 1);
 				long lastMsgId = object.getLong("messageId");
 				if (msgId <= lastMsgId)
 					msgId = lastMsgId + 1;
@@ -120,36 +118,27 @@ public class GetRequestProcessor extends GlobalResources {
 	 */
 	public String getMessage(int lastMsgId) {
 
-		String jsonResponse = null;
+		String jsonResponse = CommonResources.EMPTY_STRING;
 		List<RecieverInfoBean> latestMessages = new ArrayList<>();
 
 		long startMsgId = ++lastMsgId;
-		if (startMsgId > 100)
-			startMsgId %= 100;
 
 		MessageBean messageBean = null;
 		while ((messageBean = MSG_MAP.get(startMsgId++)) != null) {
 			long count = 0;
 			RecieverInfoBean recieverInfoBean = new RecieverInfoBean();
 
-			if (messageBean != null) {
-
-				recieverInfoBean.setMessageId(lastMsgId + count++);
-				recieverInfoBean.setSenderPcName(messageBean.getSenderPcName());
-				recieverInfoBean.setSenderName(messageBean.getSenderName());
-				recieverInfoBean.setSentTimestamp(messageBean
-						.getSentTimestamp());
-				recieverInfoBean.setMessage(messageBean.getMessage());
-				recieverInfoBean.setUsername(messageBean.getUsername());
-				latestMessages.add(recieverInfoBean);
-			}
+			recieverInfoBean.setMessageId(lastMsgId + count++);
+			recieverInfoBean.setSenderName("XXX");
+			recieverInfoBean.setSentTimestamp(messageBean.getSentTimestamp());
+			recieverInfoBean.setMessage(messageBean.getMessage());
+			recieverInfoBean.setLoginId(messageBean.getLoginId());
+			latestMessages.add(recieverInfoBean);
 		}
 
 		if (!latestMessages.isEmpty()) {
 			JSONArray array = new JSONArray(latestMessages);
 			jsonResponse = array.toString();
-		} else {
-			jsonResponse = "";
 		}
 		return jsonResponse;
 
@@ -158,18 +147,21 @@ public class GetRequestProcessor extends GlobalResources {
 	/**
 	 * Load the emojis.<br>
 	 * FIXME: To be modified. Emojis will be categorized in tab, click on that,
-	 * emojis will be loaded. Loading emojis might be incremental too, if
-	 * required.
+	 * emojis will be loaded. Loading emojis might be incremental too, if required.
 	 *
 	 * @return All emojis in as JSON
 	 */
 	public String loadEmojis() {
-		String emojis = CommonResources.RESPONSE_ERROR;
-		try {
-			emojis = CommonProcessor.getResource(CommonResources.EMOJI_DATA);
-		} catch (IOException e) {
-			e.printStackTrace();
+		EmojiService service = new EmojiServiceImpl();
+		List<EmojiEntity> emojiList = service.getAllEmoji();
+		JSONArray array = new JSONArray();
+		for (EmojiEntity emoji : emojiList) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("code", emoji.getEmojiCode());
+			jsonObject.put("name", emoji.getEmojiName());
+			jsonObject.put("data", new String(emoji.getEmojiData(), StandardCharsets.UTF_8));
+			array.put(jsonObject);
 		}
-		return emojis;
+		return array.toString();
 	}
 }

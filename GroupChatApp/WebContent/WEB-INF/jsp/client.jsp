@@ -7,15 +7,15 @@
 <title>ICS: Chat Room</title>
 <meta charset="UTF-8">
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resource/js/jqsm.js"></script>
+	src="${pageContext.request.contextPath}/js/jqsm.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resource/js/loader.js"></script>
+	src="${pageContext.request.contextPath}/js/loader.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/resource/js/user.js"></script>
+	src="${pageContext.request.contextPath}/js/user.js"></script>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resource/css/styler.css">
+	href="${pageContext.request.contextPath}/css/styler.css">
 <link rel="shortcut icon" type="image/x-icon"
-	href="${pageContext.request.contextPath}/resource/images/favicon.ico" />
+	href="${pageContext.request.contextPath}/images/favicon.ico" />
 <script type="text/javascript">
 	var isWindowActive = true;
 	$(function() {
@@ -153,7 +153,7 @@
 			a = a.substring(a.lastIndexOf(':')+1, a.length)
 
 		    var notification = new Notification('Hi ' + a + '!', {
-		      icon: '${pageContext.request.contextPath}/resource/images/cr.png',
+		      icon: '${pageContext.request.contextPath}/images/cr.png',
 		      body: 'You have a new message from ' + senderName + '.',
 		    });
 			$(notification).css('cursor', 'pointer');
@@ -169,7 +169,6 @@
 		var postData = form.serializeArray();
 		var formURL = form.attr("action");
 		var type = form.attr("method");
-		var eventId = parseInt($('#event-id').val());
 
 		var jqXhr = $.ajax({
 			url : formURL,
@@ -179,6 +178,7 @@
 
 		jqXhr
 				.done(function(data) {
+					var eventId = parseInt($('#event-id').val());
 					switch (eventId) {
 					case 1:
 						if (data === 'true') {
@@ -220,9 +220,14 @@
 	}
 
 	function loadAllMessages() {
+		var url = "${pageContext.request.contextPath}/chat/recover";
 		var jqXhr = $.ajax({
 			type : "GET",
-			url : "${pageContext.request.contextPath}/chat/recover?token=" + $('#token').val(),
+			url : url,
+			data: {
+					token: $('#token').val(),
+					loginId: $('#login-id').val()
+				}
 		});
 
 		jqXhr
@@ -275,9 +280,14 @@
 	}
 
 	function getAllUsers() {
+		var url = "${pageContext.request.contextPath}/chat/allusers";
 		var jqXhr = $.ajax({
 			type : "GET",
-			url : "${pageContext.request.contextPath}/chat/allusers?token=" + $('#token').val(),
+			url : url,
+			data: {
+				token: $('#token').val(),
+				loginId: $('#login-id').val()
+			}
 		});
 
 		jqXhr
@@ -289,9 +299,9 @@
 							$.each(data, function(i, item) {
 								$('#user-list').append('<div class="u-details"><span class="users">'
 										+ '<div class="status s-off"></div> '
-										+ item.rname
+										+ item.fullname
 										+ '</span><input type="hidden" value="'
-										+ item.uname +'" class="users-uname"></div>');
+										+ item.loginId +'" class="users-login-id"></div>');
 							});
 						}
 					}
@@ -300,9 +310,14 @@
 	}
 
 	function loadAllEmojis(){
+		var url = "${pageContext.request.contextPath}/chat/emoji";
 		var jqXhr = $.ajax({
 			type : "GET",
-			url : "${pageContext.request.contextPath}/chat/emoji?token="+ $('#token').val(),
+			url : url,
+			data: {
+				token: $('#token').val(),
+				loginId: $('#login-id').val()
+			}
 		});
 
 		jqXhr
@@ -350,7 +365,7 @@
 						var data = JSON.parse(e.data);
 						$('.s-on').removeClass('.s-on').addClass('s-off');
 						$.each(data, function(i, item) {
-							var elem = $('.u-details').find('.users-uname:input[value="' + item.uname + '"]');
+							var elem = $('.u-details').find('.users-login-id:input[value="' + item.loginId + '"]');
 
 							if(elem != undefined && elem != null && elem.length > 0) {
 								$(elem.parent().find('.status')[0]).removeClass('s-off').addClass('s-on');
@@ -387,7 +402,7 @@
 			}
 
 			var elP;
-			if(lastSender === response[i].username && lastSentAt === ts){
+			if(lastSender === response[i].loginId && lastSentAt === ts){
 				var textContentP = elP =lastTd.find('p.text-content');
 				var text = textContentP.html();
 				textContentP.empty();
@@ -396,7 +411,7 @@
 			} else {
 				var div = $('<div class="msg">'
 						+ '<input type="hidden" class="msg-ids" value="'+response[i].messageId+'">'
-						+ '<input type="hidden" class="sender-ids" value="'+response[i].username+'">'
+						+ '<input type="hidden" class="sender-ids" value="'+response[i].loginId+'">'
 						+ '</div>');
 
 				var msgMain = $('<div class="msg-main"></div>');
@@ -428,8 +443,8 @@
 					});
 				});
 
-				var username = response[i].username;
-				if (username === $('#uname').val()) {
+				var loginId = response[i].loginId;
+				if (loginId === $('#login-id').val()) {
 					div.addClass('msg-right');
 					msgDiv.addClass('msg-self');
 				} else {
@@ -535,18 +550,15 @@
 	<header id="heading">
 		<div id="title">Intra-team Communication System</div>
 		<div id="menu-div">
-			<img
-				src="${pageContext.request.contextPath}/resource/images/refresh.png"
+			<img src="${pageContext.request.contextPath}/images/refresh.png"
 				alt="Reload Page" height="28" width="28" title="Reload Page"
 				class="img-btn" id="reload-btn">
 			<c:if test="${user.group eq 'admin' }">
-				<img
-					src="${pageContext.request.contextPath}/resource/images/wipe.png"
+				<img src="${pageContext.request.contextPath}/images/wipe.png"
 					alt="Clean All Chats" height="28" width="28"
 					title="Clean All Chats" class="img-btn" id="clear-chat-btn">
 			</c:if>
-			<img
-				src="${pageContext.request.contextPath}/resource/images/logout.png"
+			<img src="${pageContext.request.contextPath}/images/logout.png"
 				alt="Sign out" height="28" width="28" title="Sign out"
 				class="img-btn" id="logout-btn">
 		</div>
@@ -584,8 +596,8 @@
 					style="display: none;"></textarea>
 				<input type="hidden" name="token" id="token"
 					value="<c:out value='${user.token}' />"> <input
-					type="hidden" name="uname" id="uname"
-					value="<c:out value='${user.username}' />"> <input
+					type="hidden" name="loginId" id="login-id"
+					value="<c:out value='${user.loginId}' />"> <input
 					type="hidden" id="event-id" value="" name="eventId">
 			</div>
 		</div>

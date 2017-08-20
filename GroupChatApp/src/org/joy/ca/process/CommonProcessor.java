@@ -6,11 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.joy.ca.beans.UserInfo;
+import org.joy.ca.db.entity.view.UserInfoView;
+import org.joy.ca.db.service.UserInfoService;
+import org.joy.ca.db.service.UserInfoServiceImpl;
 import org.joy.ca.resources.CommonResources;
 import org.joy.ca.resources.GlobalResources;
 import org.json.JSONArray;
@@ -35,14 +39,12 @@ public class CommonProcessor extends GlobalResources {
 	 * @return Parameter-Value map
 	 * @throws IOException
 	 */
-	public static final Map<String, String> getRequestBody(
-			InputStream inputStream) throws IOException {
+	public static final Map<String, String> getRequestBody(InputStream inputStream) throws IOException {
 		Map<String, String> paramValueMap = new TreeMap<>();
 
 		String line;
 		StringBuilder sb = new StringBuilder();
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				inputStream, StandardCharsets.UTF_8));
+		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 		while ((line = br.readLine()) != null) {
 			sb.append(line);
 		}
@@ -57,8 +59,7 @@ public class CommonProcessor extends GlobalResources {
 	 * @return Parameter-Value map
 	 * @throws IOException
 	 */
-	public static final Map<String, String> getRequestQuery(String query)
-			throws IOException {
+	public static final Map<String, String> getRequestQuery(String query) throws IOException {
 		Map<String, String> paramValueMap = new TreeMap<>();
 
 		if (query != null && !query.isEmpty()) {
@@ -67,7 +68,7 @@ public class CommonProcessor extends GlobalResources {
 				String paramValuePair = fragments[i];
 				String[] paramValue = paramValuePair.split(VALUE_SPLITTER);
 				String param = paramValue[0];
-				String value = paramValue.length > 1 ? paramValue[1] : null;
+				String value = paramValue.length > 1 ? URLDecoder.decode(paramValue[1], "utf-8") : null;
 				paramValueMap.put(param, value);
 			}
 		}
@@ -82,15 +83,13 @@ public class CommonProcessor extends GlobalResources {
 	 * @return File contents
 	 * @throws IOException
 	 */
-	public static final String getResource(String resourceKey)
-			throws IOException {
+	public static final String getResource(String resourceKey) throws IOException {
 		String resource = CommonResources.EMPTY_STRING;
 		String filepath = RESOURCE_PATH_MAP.get(resourceKey);
 		StringBuilder sb = new StringBuilder(512);
 
 		if (filepath != null && !filepath.isEmpty()) {
-			try (InputStreamReader r = new InputStreamReader(
-					new FileInputStream(filepath), StandardCharsets.UTF_8)) {
+			try (InputStreamReader r = new InputStreamReader(new FileInputStream(filepath), StandardCharsets.UTF_8)) {
 				int c = 0;
 				while ((c = r.read()) != -1) {
 					sb.append((char) c);
@@ -104,30 +103,30 @@ public class CommonProcessor extends GlobalResources {
 	}
 
 	/**
-	 * Check, if an user is online<br>
-	 * TODO: to be replaced by server push
+	 * Check for valid logged in user
 	 *
 	 * @param pageToken
 	 * @param sessionToken
 	 * @return
 	 */
-	public static final boolean checkLoggedInUserByToken(String pageToken,
-			Object sessionToken) {
+	public static final boolean checkLoggedInUserByToken(String pageToken, Object sessionToken) {
 
-		return (pageToken != null && !pageToken.isEmpty()
-				&& sessionToken != null && pageToken.equals(sessionToken));
+		return (pageToken != null && !pageToken.isEmpty() && sessionToken != null && pageToken.equals(sessionToken));
 	}
 
 	// TODO: To be replaced with DB implementation
-	public static final UserInfo getUserDetailsByToken(String token) {
+	public static final UserInfo getUserDetailsByLoginId(int loginId) {
 
-		for (UserInfo info : USER_LIST) {
-			String storedToken = info.getToken();
-			if (storedToken.equals(token)) {
-				return info;
-			}
+		UserInfo info = null;
+		UserInfoService service = new UserInfoServiceImpl();
+		UserInfoView userInfoView = service.getUserInfoByLoginId(loginId);
+		if (userInfoView != null) {
+			info = new UserInfo();
+			info.setLoginId(loginId);
+			info.setGroup(userInfoView.getGroup());
+			info.setRealName(userInfoView.getFullname());
 		}
-		return null;
+		return info;
 	}
 
 	/**
