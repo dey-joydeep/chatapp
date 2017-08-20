@@ -17,7 +17,7 @@ body {
 
 #content {
 	width: 76.64%;
-	height: 552px;
+	height: 450px;
 	display: inline-block;
 	overflow-y: auto;
 	border: 1px solid;
@@ -25,7 +25,7 @@ body {
 
 #users {
 	width: 22%;
-	height: 552px;
+	height: 450px;
 	display: inline-block;
 	position: fixed;
 	margin-left: 2px;
@@ -62,11 +62,6 @@ body {
 
 #emoji-list-opener {
 	cursor: pointer;
-}
-
-#enter-control {
-	/* 	font-size: 0.8em; */
-
 }
 
 #send-div {
@@ -159,7 +154,7 @@ body {
 	height: 50px;
 	overflow-y: scroll;
 	display: none;
-	width: 100.3%;
+	width: 76.64%;
 }
 
 .emoji-div {

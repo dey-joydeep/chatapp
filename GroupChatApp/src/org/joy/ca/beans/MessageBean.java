@@ -8,20 +8,10 @@ package org.joy.ca.beans;
  */
 public class MessageBean {
 
-	private String senderName;
 	private String senderIp;
 	private String message;
 	private String sentTimestamp;
-	private String senderPcName;
-	private String username;
-
-	public String getSenderName() {
-		return senderName;
-	}
-
-	public void setSenderName(String senderName) {
-		this.senderName = senderName;
-	}
+	private String loginId;
 
 	public String getSenderIp() {
 		return senderIp;
@@ -47,19 +37,11 @@ public class MessageBean {
 		this.sentTimestamp = sentTimestamp;
 	}
 
-	public String getSenderPcName() {
-		return senderPcName;
+	public String getLoginId() {
+		return loginId;
 	}
 
-	public void setSenderPcName(String senderName) {
-		this.senderPcName = senderName;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 }

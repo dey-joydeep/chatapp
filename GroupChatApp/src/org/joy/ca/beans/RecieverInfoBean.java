@@ -13,7 +13,7 @@ public class RecieverInfoBean {
 	private String message;
 	private String sentTimestamp;
 	private String senderName;
-	private String username;
+	private String loginId;
 
 	public Long getMessageId() {
 		return messageId;
@@ -55,12 +55,12 @@ public class RecieverInfoBean {
 		this.senderName = senderName;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getLoginId() {
+		return loginId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 }

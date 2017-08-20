@@ -8,18 +8,18 @@ package org.joy.ca.beans;
  */
 public class UserInfo {
 
-	private String username;
+	private int loginId;
 	private String ipAddress;
 	private String token;
 	private String realName;
 	private String group;
 
-	public String getUsername() {
-		return username;
+	public int getLoginId() {
+		return loginId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginId(int loginId) {
+		this.loginId = loginId;
 	}
 
 	public String getIpAddress() {

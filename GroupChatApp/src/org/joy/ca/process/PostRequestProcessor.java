@@ -15,7 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.joy.ca.beans.MessageBean;
-import org.joy.ca.beans.UserInfo;
+import org.joy.ca.db.service.UserInfoService;
+import org.joy.ca.db.service.UserInfoServiceImpl;
 import org.joy.ca.resources.CommonResources;
 import org.joy.ca.resources.GlobalResources;
 import org.json.JSONArray;
@@ -38,100 +39,30 @@ public class PostRequestProcessor extends GlobalResources {
 	 * @return JSON string containing the login status
 	 */
 	public String login(HttpServletRequest req) {
-		int errorType = 1;
-		UserInfo info = null;
-		String token = null;
 		Map<String, String> formData = null;
-		String ip = req.getRemoteAddr();
-
-		JSONObject jsonObject = new JSONObject();
 
 		try {
 			formData = CommonProcessor.getRequestBody(req.getInputStream());
-			String credentials = CommonProcessor
-					.getResource(CommonResources.CREDENTIAL_DATA);
-			JSONArray jsonArray = new JSONArray(credentials);
+			UserInfoService userInfoService = new UserInfoServiceImpl();
+			JSONObject jsonObject = new JSONObject();
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				jsonObject = jsonArray.getJSONObject(i);
-
-				String username = jsonObject.getString("username");
-				if (username.equals(formData.get("uname"))
-						&& jsonObject.getString("password").equals(
-								formData.get("pass"))) {
-
-					info = getUserDetailsByUsername(username);
-					if (info == null) {
-						info = new UserInfo();
-						info.setIpAddress(ip);
-						info.setRealName(jsonObject.getString("name"));
-						info.setUsername(username);
-						info.setGroup(jsonObject.getString("group"));
-						info.setUsername(username);
-						token = UUID.randomUUID().toString();
-						info.setToken(token);
-						USER_LIST.add(info);
-						errorType = 0;
-						System.out.println("1 User is logged in: "
-								+ info.getRealName() + "(" + username + ")");
-					} else {
-						// FIXME: Check user login from different IP (to be
-						// removed later with associative actions)
-						if (ip.equals(info.getIpAddress())) {
-							errorType = 0;
-							token = info.getToken();
-						} else {
-							errorType = 2;
-						}
-					}
-
-					break;
-				}
-			}
-			jsonObject = new JSONObject();
-			switch (errorType) {
-			case 0:
+			Integer loginId = userInfoService.authenticateUser(formData);
+			if (loginId != null) {
+				String token = UUID.randomUUID().toString();
 				jsonObject.put("success", true);
 				jsonObject.put("token", token);
+				jsonObject.put("loginId", loginId);
 				// Create new session on successful login
 				HttpSession session = req.getSession(true);
 				session.setAttribute("token", token);
-				break;
-			case 1:
+			} else {
 				jsonObject.put("success", false);
-				jsonObject.put("message", "Invalid username/password.");
-				break;
-			case 2:
-				jsonObject.put("success", false);
-				jsonObject.put("message",
-						"The user is already logged in from different system ("
-								+ info.getIpAddress() + ")");
-				break;
-			default:
-				break;
+				jsonObject.put("message", "Invalid login ID/password.");
 			}
 			return jsonObject.toString();
 		} catch (IOException | JSONException e) {
 			return CommonResources.EMPTY_STRING;
 		}
-	}
-
-	/**
-	 * FIXME: Get user details by username. This USER_LIST will be removed
-	 * later, and the data will be fetched from database.
-	 *
-	 * @param username
-	 * @return {@link UserInfo}
-	 */
-	private UserInfo getUserDetailsByUsername(String username) {
-
-		for (UserInfo info : USER_LIST) {
-			String storedUsername = info.getUsername();
-			if (storedUsername.equals(username)) {
-				return info;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -141,11 +72,11 @@ public class PostRequestProcessor extends GlobalResources {
 	 * @param hostName
 	 * @return
 	 */
-	public String writeMessage(Map<String, String> params, String hostName) {
+	public String writeMessage(int loginId, String message, String ipAddress) {
 
 		String status = CommonResources.RESPONSE_ERROR;
 		try {
-			String message = URLDecoder.decode(params.get("message"), "utf-8");
+			message = URLDecoder.decode(message, "utf-8");
 
 			if (message.endsWith("\r\n")) {
 				message = message.substring(0, message.length() - 2);
@@ -154,15 +85,10 @@ public class PostRequestProcessor extends GlobalResources {
 			}
 
 			if (!message.isEmpty()) {
-				UserInfo info = CommonProcessor.getUserDetailsByToken(params
-						.get("token"));
 				MessageBean messageBean = new MessageBean();
-				messageBean.setSenderName(info.getRealName());
-				messageBean.setUsername(info.getUsername());
-				messageBean.setSenderPcName(hostName);
-				messageBean.setSenderIp(info.getIpAddress());
-				messageBean.setSentTimestamp(new SimpleDateFormat(
-						"yyyy-MM-dd HH:mm:ss").format(new Date()));
+				messageBean.setLoginId(String.valueOf(loginId));
+				messageBean.setSenderIp(ipAddress);
+				messageBean.setSentTimestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				messageBean.setMessage(message);
 
 				if (MSG_MAP.size() == 100) {
@@ -213,8 +139,7 @@ public class PostRequestProcessor extends GlobalResources {
 			}
 		}
 
-		OutputStreamWriter writer = new OutputStreamWriter(
-				new FileOutputStream(CommonResources.CHAT_DATA, false),
+		OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(CommonResources.CHAT_DATA, false),
 				StandardCharsets.UTF_8);
 		writer.write(jsonArray.toString(3));
 		writer.close();
@@ -228,7 +153,7 @@ public class PostRequestProcessor extends GlobalResources {
 	 */
 	private void logMessage(MessageBean messageBean) {
 		System.out.println("Message ID: " + msgId);
-		System.out.println("Sender Name: " + messageBean.getSenderName());
+		System.out.println("Sender ID: " + messageBean.getLoginId());
 		System.out.println("Sender IP: " + messageBean.getSenderIp());
 
 		System.out.println("Sent Timestamp: " + messageBean.getSentTimestamp());
@@ -238,10 +163,10 @@ public class PostRequestProcessor extends GlobalResources {
 	/**
 	 * FIXME: Physically clear entire chat records. The implementation of this
 	 * method is required to modify. The clearing could be either physical or
-	 * logical, depending on the executor of this action. As the chat is
-	 * basically conducting between two parties, when any one is deleting the
-	 * chats, a delete flag is required to set. When the flag is set for both
-	 * the parties, a physical delete can be executed.
+	 * logical, depending on the executor of this action. As the chat is basically
+	 * conducting between two parties, when any one is deleting the chats, a delete
+	 * flag is required to set. When the flag is set for both the parties, a
+	 * physical delete can be executed.
 	 *
 	 * @return String representation of boolean value. true, if success, false
 	 *         otherwise.
@@ -264,8 +189,8 @@ public class PostRequestProcessor extends GlobalResources {
 
 	/**
 	 * FIXME: This method could be deleted as USER_LIST will be removed from the
-	 * scenario. A push notification will be sent rather to inform that this
-	 * user is offline currently.
+	 * scenario. A push notification will be sent rather to inform that this user is
+	 * offline currently.
 	 *
 	 * @param token
 	 * @return
@@ -273,9 +198,8 @@ public class PostRequestProcessor extends GlobalResources {
 	public String logout(String token) {
 		for (int i = 0; i < USER_LIST.size(); i++) {
 			if (USER_LIST.get(i).getToken().equals(token)) {
-				System.out.println("1 User is logged out: "
-						+ USER_LIST.get(i).getRealName() + "("
-						+ USER_LIST.get(i).getUsername() + ")");
+				System.out.println("1 User is logged out: " + USER_LIST.get(i).getRealName() + "("
+						+ USER_LIST.get(i).getLoginId() + ")");
 				USER_LIST.remove(i);
 				return CommonResources.RESPONSE_SUCCESS;
 			}

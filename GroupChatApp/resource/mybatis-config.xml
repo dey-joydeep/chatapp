@@ -5,8 +5,22 @@
 <configuration>
 	<properties resource='jdbc.properties' />
 	<typeAliases>
-		<typeAlias type='com.sivalabs.mybatisdemo.domain.User'
-			alias='User'></typeAlias>
+		<!-- Table list start -->
+		<typeAlias type='org.joy.ca.db.entity.table.LoginEntity'
+			alias='Login' />
+		<typeAlias type='org.joy.ca.db.entity.table.MessageEntity'
+			alias='Message' />
+		<typeAlias type='org.joy.ca.db.entity.table.UsersEntity'
+			alias='Users' />
+		<typeAlias type='org.joy.ca.db.entity.table.EmojiGroupEntity'
+			alias='EmojiGroup' />
+		<typeAlias type='org.joy.ca.db.entity.table.EmojiEntity'
+			alias='Emoji' />
+		<!-- Table list end -->
+		<!-- View list start -->
+		<typeAlias type='org.joy.ca.db.entity.view.UserInfoView'
+			alias='UserView' />
+		<!-- View list end -->
 	</typeAliases>
 	<environments default='development'>
 		<environment id='development'>
@@ -20,6 +34,8 @@
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource='com/sivalabs/mybatisdemo/mappers/UserMapper.xml' />
+		<mapper resource='org/joy/ca/db/mapper/UserInfoMapper.xml' />
+		<mapper resource='org/joy/ca/db/mapper/EmojiGroupMapper.xml' />
+		<mapper resource='org/joy/ca/db/mapper/EmojiMapper.xml' />
 	</mappers>
 </configuration>
