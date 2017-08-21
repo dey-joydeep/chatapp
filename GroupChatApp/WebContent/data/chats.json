@@ -1,0 +1,47 @@
+[
+   {
+      "senderName": "Joydeep",
+      "sentTimestamp": "2017-07-27 15:51:38",
+      "senderPcName": "icsjd.com",
+      "messageId": 0,
+      "message": "aaa",
+      "senderIp": "10.2.121.89",
+      "username": "jd001"
+   },
+   {
+      "senderName": "Joydeep",
+      "sentTimestamp": "2017-07-27 15:51:41",
+      "senderPcName": "icsjd.com",
+      "messageId": 1,
+      "message": "aaaa",
+      "senderIp": "10.2.121.89",
+      "username": "jd001"
+   },
+   {
+      "senderName": "Joydeep",
+      "sentTimestamp": "2017-07-27 15:51:45",
+      "senderPcName": "icsjd.com",
+      "messageId": 2,
+      "message": "&nbsp;<img class=\"emoji\" src=\"data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAAOVBMVEVHcEz/zE3/zEz/zUz/zEz/zEz/zEz/zEz/zEz/zEz/zEz1w0f/zE1mRQBwTgSAXAztvEOcdBrRojXWKc1vAAAADHRSTlMA3owePLNZ/O1tz/NT9fWqAAABnUlEQVRYw71Y23aEIAz0QkjgRFf3/z+2nF2tWwXLZdp58SE4JxkgJOm6Gxg3kO+FWXpPgzNdDUZHom/w/hFyYyGNpe3vM5hsAY3r9QYy5NKI3iJI5jJojNcM9L8KP7Bmge/jG71mw99soBEtgCTDs6xF4MRJcIU8gckh/En5ZCp4AtNFp1G0CnLeO6+V8KdzqNUY2gWKyOS1AR/BOW3CcZqkjUhADh0u9a1Em0tWm/G+KdRORK/Lwe1EPCKk3uWORLas87wusR9SFooeomWeAubI+qQl7Ju5Ln9MLzxKLCYi0XPa8My3hANwTSDrvnzNt4RkQin/IxGkLUHtawaZvpFvCbnketHmffWcb9E+svtVoUnHELGZI0RV28+x7FhxIFliWa3iigSxvSIubdh+Ugio5Y39eUUchsjG0kgNTPPreDxIhNEamPxhzxHsgcQ92bAiAlfWwAotXOkHK0Zx5TGsYK8Pjv1fNTWwNgvX+OFaUVxzjGvXcQME3Egje8jiDWDsE9Rx/zuIAo7GTsO6w5fyYd0mvP0cH9pbgb8A0ES+r6jeK9MAAAAASUVORK5CYII=\" alt=\"face without mouth\">&nbsp;",
+      "senderIp": "10.2.121.89",
+      "username": "jd001"
+   },
+   {
+      "senderName": "Joydeep",
+      "sentTimestamp": "2017-07-31 22:28:28",
+      "senderPcName": "0:0:0:0:0:0:0:1",
+      "messageId": 3,
+      "message": "aaa",
+      "senderIp": "0:0:0:0:0:0:0:1",
+      "username": "jd001"
+   },
+   {
+      "senderName": "Rakesh",
+      "sentTimestamp": "2017-07-31 22:28:38",
+      "senderPcName": "0:0:0:0:0:0:0:1",
+      "messageId": 4,
+      "message": "aaa<br><br>",
+      "senderIp": "0:0:0:0:0:0:0:1",
+      "username": "rp001"
+   }
+]

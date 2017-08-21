@@ -1,0 +1,190 @@
+body {
+	overflow: hidden;
+}
+
+#title {
+	display: inline-block;
+	font-family: cursive;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+#my-name {
+	font-size: 11px;
+	margin: 2px 0;
+	padding: 2px 0;
+}
+
+#content {
+	width: 76.64%;
+	height: 450px;
+	display: inline-block;
+	overflow-y: auto;
+	border: 1px solid;
+}
+
+#users {
+	width: 22%;
+	height: 450px;
+	display: inline-block;
+	position: fixed;
+	margin-left: 2px;
+	border: 1px solid;
+}
+
+#users-title {
+	padding: 5px;
+	border-bottom: 1px solid;
+}
+
+#user-list {
+	height: 94.55%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#msg-in-box {
+	width: 76.64%;
+	height: 48px;
+	float: left;
+	margin-right: 1%;
+	border: 1px solid;
+	overflow-y: auto;
+	word-break: break-word;
+	padding: 3px;
+}
+
+#emoji-control {
+	width: 9%;
+	float: left;
+	margin-right: 1%;
+}
+
+#emoji-list-opener {
+	cursor: pointer;
+}
+
+#send-div {
+	float: left;
+}
+
+#send-btn {
+	width: 130%;
+	height: 50px;
+}
+
+#menu-div {
+	display: inline-block;
+	position: absolute;
+	right: 1.3%;
+}
+
+.msg-main {
+	padding: 1px;
+}
+
+.msg-div {
+	border-radius: 15px;
+}
+
+.msg-right {
+	float: right;
+}
+
+.msg-self {
+	background: #f1f8e9;
+}
+
+.msg-left {
+	float: left;
+}
+
+.msg-other {
+	background: #e3f2fc;
+}
+
+.ts {
+	font-size: 0.5em;
+	text-align: center;
+}
+
+.text-content {
+	font-size: 15px;
+	white-space: pre-wrap;
+	padding: 15px;
+	cursor: pointer;
+	margin: 0;
+}
+
+.users {
+	padding: 10px 0px;
+	margin-left: 5px;
+	width: 100%;
+	display: block;
+}
+
+.img-btn {
+	cursor: pointer;
+}
+
+.status {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.s-on {
+	background: #73AD21;
+}
+
+.s-off {
+	background: #808080;
+}
+
+.dt-grp {
+	font-size: 0.6em;
+	text-align: center;
+	margin: 3px auto;
+	padding-top: 5px;
+	clear: both;
+}
+
+#emoji-container {
+	height: 50px;
+	overflow-y: scroll;
+	display: none;
+	width: 76.64%;
+}
+
+.emoji-div {
+	margin: 2px;
+	display: inline-block;
+}
+
+.emoji-div .emoji {
+	cursor: pointer;
+}
+
+.emoji {
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+}
+
+.msg {
+	clear: both;
+	word-break: break-word;
+	margin: 0 4px;
+}
+
+#err-div {
+	width: 90.4%;
+	height: 20px;
+	border: none;
+	margin-top: 5px;
+}
+
+#err-div span {
+	color: red;
+}

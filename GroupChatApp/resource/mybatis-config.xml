@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE configuration
+  PUBLIC '-//mybatis.org//DTD Config 3.0//EN'
+  'http://mybatis.org/dtd/mybatis-3-config.dtd'>
+<configuration>
+	<properties resource='jdbc.properties' />
+	<typeAliases>
+		<!-- Table list start -->
+		<typeAlias type='org.joy.ca.db.entity.table.LoginEntity'
+			alias='Login' />
+		<typeAlias type='org.joy.ca.db.entity.table.MessageEntity'
+			alias='Message' />
+		<typeAlias type='org.joy.ca.db.entity.table.UsersEntity'
+			alias='Users' />
+		<typeAlias type='org.joy.ca.db.entity.table.EmojiGroupEntity'
+			alias='EmojiGroup' />
+		<typeAlias type='org.joy.ca.db.entity.table.EmojiEntity'
+			alias='Emoji' />
+		<!-- Table list end -->
+		<!-- View list start -->
+		<typeAlias type='org.joy.ca.db.entity.view.UserInfoView'
+			alias='UserView' />
+		<!-- View list end -->
+	</typeAliases>
+	<environments default='development'>
+		<environment id='development'>
+			<transactionManager type='JDBC' />
+			<dataSource type='POOLED'>
+				<property name='driver' value='${jdbc.driverClassName}' />
+				<property name='url' value='${jdbc.url}' />
+				<property name='username' value='${jdbc.username}' />
+				<property name='password' value='${jdbc.password}' />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource='org/joy/ca/db/mapper/UserInfoMapper.xml' />
+		<mapper resource='org/joy/ca/db/mapper/EmojiGroupMapper.xml' />
+		<mapper resource='org/joy/ca/db/mapper/EmojiMapper.xml' />
+	</mappers>
+</configuration>
