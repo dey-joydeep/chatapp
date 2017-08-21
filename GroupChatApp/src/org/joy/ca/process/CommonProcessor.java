@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.joy.ca.beans.UserInfo;
 import org.joy.ca.db.entity.view.UserInfoView;
 import org.joy.ca.db.service.UserInfoService;
@@ -109,8 +111,10 @@ public class CommonProcessor extends GlobalResources {
 	 * @param sessionToken
 	 * @return
 	 */
-	public static final boolean checkLoggedInUserByToken(String pageToken, Object sessionToken) {
-
+	public static final boolean checkLoggedInUserByToken(String pageToken, HttpSession session) {
+		if (session == null)
+			return false;
+		Object sessionToken = session.getAttribute("token");
 		return (pageToken != null && !pageToken.isEmpty() && sessionToken != null && pageToken.equals(sessionToken));
 	}
 
