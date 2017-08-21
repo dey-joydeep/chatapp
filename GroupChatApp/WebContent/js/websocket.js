@@ -2,7 +2,7 @@ $(function() {
 	if (typeof (websocket) == "undefined" || websocket == null) {
 
 		var wsUrl = document.origin.replace("http", "ws");
-		wsUrl += contextPath + "/check?uname=" + $('#uname').val();
+		wsUrl += contextPath + "/check?loginId=" + $('#login-id').val();
 		websocket = new WebSocket(wsUrl);
 
 		websocket.onmessage = function(e) {
