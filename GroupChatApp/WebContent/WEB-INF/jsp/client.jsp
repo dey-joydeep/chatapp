@@ -10,8 +10,8 @@
 	src="${pageContext.request.contextPath}/js/jqsm.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/loader.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/user.js"></script>
+<!-- <script type="text/javascript" -->
+<%-- 	src="${pageContext.request.contextPath}/js/user.js"></script> --%>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/styler.css">
 <link rel="shortcut icon" type="image/x-icon"
@@ -305,7 +305,7 @@
 							});
 						}
 					}
-					startUserWorker();
+// 					startUserWorker();
 				});
 	}
 
