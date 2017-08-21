@@ -35,7 +35,7 @@ public class EventControlServlet extends HttpServlet {
 		String token = formData.get("token");
 		String response = CommonResources.RESPONSE_ERROR;
 
-		if (CommonProcessor.checkLoggedInUserByToken(token, session.getAttribute("token"))) {
+		if (CommonProcessor.checkLoggedInUserByToken(token, session)) {
 			PostRequestProcessor processor = new PostRequestProcessor();
 			int eventId = Integer.parseInt(formData.get("eventId"));
 

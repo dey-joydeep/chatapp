@@ -40,7 +40,7 @@ public class ChatServlet extends HttpServlet {
 		Map<String, String> paramValue = CommonProcessor.getRequestQuery(req.getQueryString());
 		String token = paramValue.get("token");
 
-		if (CommonProcessor.checkLoggedInUserByToken(token, session.getAttribute("token"))) {
+		if (CommonProcessor.checkLoggedInUserByToken(token, session)) {
 			String path = req.getRequestURI();
 			path = path.substring(path.lastIndexOf('/') + 1, path.length());
 			GetRequestProcessor processor = new GetRequestProcessor();
@@ -83,7 +83,7 @@ public class ChatServlet extends HttpServlet {
 		Map<String, String> formData = CommonProcessor.getRequestBody(req.getInputStream());
 		String token = formData.get("token");
 		int loginId = Integer.parseInt(formData.get("loginId"));
-		boolean isValidUser = CommonProcessor.checkLoggedInUserByToken(token, session.getAttribute("token"));
+		boolean isValidUser = CommonProcessor.checkLoggedInUserByToken(token, session);
 
 		if (isValidUser) {
 			UserInfo userInfo = CommonProcessor.getUserDetailsByLoginId(loginId);

@@ -30,17 +30,14 @@ public class WebWrokerServlet extends HttpServlet {
 	private static final long serialVersionUID = 5023949434633527784L;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		HttpSession session = req.getSession(false);
 		String response = CommonResources.RESPONSE_ERROR;
-		Map<String, String> paramValue = CommonProcessor.getRequestQuery(req
-				.getQueryString());
+		Map<String, String> paramValue = CommonProcessor.getRequestQuery(req.getQueryString());
 		String token = paramValue.get("token");
 
-		if (CommonProcessor.checkLoggedInUserByToken(token,
-				session.getAttribute("token"))) {
+		if (CommonProcessor.checkLoggedInUserByToken(token, session)) {
 			String path = req.getRequestURI();
 			path = path.substring(path.lastIndexOf('/') + 1, path.length());
 			GetRequestProcessor processor = new GetRequestProcessor();
@@ -61,8 +58,7 @@ public class WebWrokerServlet extends HttpServlet {
 		}
 
 		// If the response is not empty or -1, the content is always a JSON
-		if (!response.isEmpty()
-				&& !CommonResources.RESPONSE_ERROR.equals(response))
+		if (!response.isEmpty() && !CommonResources.RESPONSE_ERROR.equals(response))
 			resp.setContentType("application/json");
 
 		PrintWriter writer = resp.getWriter();
