@@ -22,12 +22,10 @@
 // 		$(this).bind("contextmenu", function(e) {
 //             e.preventDefault();
 //         });
-
 // 		$(window).on('unload', function() {
 // 			if($('#page-unload-status').val() === 'close')
 //  				$('#logout-btn').click();
 // 		});
-
 // 		$(window).on('keydown', function(e){
 // 			// F12=123, I=73 (Ctrl+Shift+I), F5= ,R=82
 // 			var allowKey = event.keyCode == 123
@@ -38,7 +36,6 @@
 // 				e.preventDefault();
 // 			}
 // 		});
-
 		$(window).blur(function(){
 			  isWindowActive = false;
 		});
@@ -49,13 +46,10 @@
 		    var target = this;
 		    return target.replace(new RegExp(search, 'g'), replacement);
 		};
-
 		$('#msg-in-box').focus();
-
 		getAllUsers();
 		loadAllMessages();
  		loadAllEmojis();
-
 		$('#msg-in-box').on('keyup', function() {
 			if (!event.shiftKey) {
 				var key = event.keyCode || event.charCode;
@@ -74,9 +68,7 @@
 			} else if (content.endsWith("\n")) {
 				content = content.substring(0, content.length - 1);
 			}
-
 			$('#msg-in-box-content').val(content.trim());
-
 			if ($('#msg-in-box-content').val() !== "") {
 				$('#event-id').val(1);
 				sendPostData();
@@ -84,27 +76,22 @@
 			$('#msg-in-box').focus();
 			e.preventDefault();
 		});
-
 		$("#msg-in-box").bind("paste", function(e){
  		    e.preventDefault();
 		    var pastedData = e.originalEvent.clipboardData.getData('text');
 		    document.execCommand("insertText", false, pastedData);
 		    scrollToBottom('msg-in-box');
 		} );
-
 		$('#reload-btn').click(function(e) {
 			$('#page-unload-status').val('reload')
 			window.location.reload(true);
 		});
-
 		$('#logout-btn').click(function(e) {
 			$('#event-id').val(2);
 			sendPostData();
 			e.preventDefault();
 		});
-
 		var size = [ window.outerWidth, window.outerHeight ];
-
 		$('#err-box').bind("DOMSubtreeModified",function(){
 			if($('#err-box').text() != ''){
 				size = [ window.outerWidth, window.outerHeight + 27 ];
@@ -117,18 +104,15 @@
 				});
 			}
 		});
-
 		$('#emoji-list-opener').click(function(){
 			var modifier = -50;
 			if($('#emoji-container').is(':hidden')){
 				modifier = -modifier;
 			}
-
 			$('#emoji-container').toggle();
 			size = [ window.outerWidth, window.outerHeight + modifier ];
 			$( window ).resize();
 		});
-
 		<c:if test = "${user.group eq 'admin'}">
 			$('#clear-chat-btn').click(function(e){
 				1==confirm('All chat records from all the users will be permanently removed. Press OK to proceed, or CANCEL to cancel cleraing.')&&($('#event-id').val(3)
@@ -136,22 +120,18 @@
 						,e.preventDefault())
 			});
 		</c:if>
-
 		$(window).resize(function() {
 			window.resizeTo(size[0], size[1]);
 		});
-
 		if (Notification.permission !== "granted")
 		    Notification.requestPermission();
 	});
-
 	function notifyMe(senderName) {
 		if (Notification.permission !== "granted")
 			Notification.requestPermission();
 		else {
 			var a = $('#my-name').text();
 			a = a.substring(a.lastIndexOf(':')+1, a.length)
-
 		    var notification = new Notification('Hi ' + a + '!', {
 		      icon: '${pageContext.request.contextPath}/images/cr.png',
 		      body: 'You have a new message from ' + senderName + '.',
@@ -163,19 +143,16 @@
 		    };
 		}
 	}
-
 	function sendPostData() {
 		var form = $('#chat-form');
 		var postData = form.serializeArray();
 		var formURL = form.attr("action");
 		var type = form.attr("method");
-
 		var jqXhr = $.ajax({
 			url : formURL,
 			type : type,
 			data : postData,
 		});
-
 		jqXhr
 				.done(function(data) {
 					var eventId = parseInt($('#event-id').val());
@@ -218,7 +195,6 @@
 					}
 				});
 	}
-
 	function loadAllMessages() {
 		var url = "${pageContext.request.contextPath}/chat/recover";
 		var jqXhr = $.ajax({
@@ -229,7 +205,6 @@
 					loginId: $('#login-id').val()
 				}
 		});
-
 		jqXhr
 				.done(function(data) {
 					if (data !== null && data !== '') {
@@ -245,7 +220,6 @@
 					startChatWorker();
 				});
 	}
-
 	function startChatWorker() {
 		if (typeof (Worker) !== "undefined") {
 			if (typeof (w2) == "undefined") {
@@ -264,7 +238,6 @@
 					} else {
 						var response = JSON.parse(e.data);
 						messageAppender(response);
-
 // 						if(!isWindowActive)
 // 							notifyMe();
 					}
@@ -278,7 +251,6 @@
 			alert("Can't execute Chatroom. Upgrade your browser to modern one!!");
 		}
 	}
-
 	function getAllUsers() {
 		var url = "${pageContext.request.contextPath}/chat/allusers";
 		var jqXhr = $.ajax({
@@ -289,7 +261,6 @@
 				loginId: $('#login-id').val()
 			}
 		});
-
 		jqXhr
 				.done(function(data) {
 					if (data !== null && data !== '') {
@@ -308,7 +279,6 @@
 // 					startUserWorker();
 				});
 	}
-
 	function loadAllEmojis(){
 		var url = "${pageContext.request.contextPath}/chat/emoji";
 		var jqXhr = $.ajax({
@@ -319,11 +289,9 @@
 				loginId: $('#login-id').val()
 			}
 		});
-
 		jqXhr
 				.done(function(data) {
 					if (data !== null && data !== 'false') {
-
 						if (data === "-1") {
 							window.location.replace('${pageContext.request.contextPath}/error');
 						} else {
@@ -332,7 +300,6 @@
 								$('#emoji-container').append(div);
 								var img = $('<img class="emoji" src="data:image/png;base64, '+ item.data + '" alt="<<' + item.name + '>>" title="' + item.name + '" />');
 								div.append(img);
-
 								img.click(function(){
 									var newImg = $(this).clone();
 									newImg.removeAttr('title');
@@ -344,7 +311,6 @@
 					}
 				});
 	}
-
 	function startUserWorker() {
 		if (typeof (Worker) !== "undefined") {
 			if (typeof (w1) == "undefined") {
@@ -365,7 +331,6 @@
 						$('.s-on').removeClass('.s-on').addClass('s-off');
 						$.each(data, function(i, item) {
 							var elem = $('.u-details').find('.users-login-id:input[value="' + item.loginId + '"]');
-
 							if(elem != undefined && elem != null && elem.length > 0) {
 								$(elem.parent().find('.status')[0]).removeClass('s-off').addClass('s-on');
 							}
@@ -382,24 +347,19 @@
 			alert("Can't execute Chatroom. Upgrade your browser to modern one!!");
 		}
 	}
-
 	function messageAppender(response) {
 		for (var i = 0; i < response.length; i++) {
 			var msgs = $('.msg');
 			var lastTd = $(msgs[msgs.length - 1]);
-
 			var lastSender = lastTd.find('.sender-ids').val();
 			var lastSentAt = lastTd.find('.ts').text();
 			lastSentAt = lastSentAt.substring(lastSentAt.indexOf('@')+1);
 			var ts = response[i].sentTimestamp;
 			ts = ts.substring(0, ts.lastIndexOf(':'));
-
-
 			var dtGrp = getDateGroupDiv(ts);
 			if(dtGrp !== null) {
 				$('#content-body').append(dtGrp);
 			}
-
 			var elP;
 			if(lastSender === response[i].loginId && lastSentAt === ts){
 				var textContentP = elP =lastTd.find('p.text-content');
@@ -412,15 +372,12 @@
 						+ '<input type="hidden" class="msg-ids" value="'+response[i].messageId+'">'
 						+ '<input type="hidden" class="sender-ids" value="'+response[i].loginId+'">'
 						+ '</div>');
-
 				var msgMain = $('<div class="msg-main"></div>');
 				var msgDiv = $('<div class="msg-div"></div>');
 				var tsDiv = $('<div class="ts-div"></div>');
 				var p1 = elP = $('<p class="text-content"></p>').html(
 						response[i].senderName + ': ' + response[i].message);
-
 				var p2 = '<p class="ts">Sent @' + ts + '</p>';
-
 				$('#content-body').append(div);
 				div.append(msgMain);
 				msgMain.append(msgDiv);
@@ -431,17 +388,14 @@
 				p1.click(function(){
 					var parent = $(this).parent().parent().parent();
 					var isLast = parent.is(':last-child');
-
 					var duration = 0;
 					if(!isLast)
 						duration = 500;
-
 					parent.find('.ts-div').fadeToggle(duration, function() {
 						if(isLast)
 							scrollToBottom('content');
 					});
 				});
-
 				var loginId = response[i].loginId;
 				if (loginId === $('#login-id').val()) {
 					div.addClass('msg-right');
@@ -453,10 +407,8 @@
 						notifyMe(response[i].senderName);
 				}
 			}
-
 			var content = elP.html();
 			var regEx = /(https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w\/_\.]*(\?\S+)?)?)?)/igm;
-
 			var match = regEx.exec(content);
 			while(match != null) {
 				var link = match[0];
@@ -468,24 +420,20 @@
 		setLastMsgId();
 		scrollToBottom('content');
 	}
-
 	function scrollToBottom(id) {
 		var content = $('#' + id);
 		var height = content[0].scrollHeight;
 		content.scrollTop(height);
 	}
-
 	function getDateGroupDiv(ts) {
 		var tsLast = $('.ts:last');
 		var proceed = true;
 		var lastTs = ts.substring(0, ts.lastIndexOf(' '));
-
 		if(tsLast.length > 0 ){
 			var lastSentAt = tsLast.text();
 			lastSentAt = lastSentAt.substring(lastSentAt.indexOf('@')+1, lastSentAt.lastIndexOf(' '));
 			proceed = lastSentAt === lastTs ? false : true;
 		}
-
 		if(proceed){
 			var dateParts = lastTs.split('-');
 			var dtGrp = dateParts[0] + ' ';
@@ -528,13 +476,11 @@
 				break;
 			}
 			dtGrp += dateParts[2];
-
 			return $('<div class="dt-grp"><p style="margin: 0;">' + dtGrp + '</p></div>');
 		}else {
 			return null;
 		}
 	}
-
 	function setLastMsgId() {
 		var msgIds = $('.msg-ids');
 		if (msgIds === undefined || msgIds.length === 0) {
