@@ -8,5 +8,7 @@ This two processes run seperately from two different WebWorkers.
 The application is runnable particualarly in Chrome. (Not supported in IE, Not tested in Firefox and Safari)
 
 Branch Purpose:
-Integration of Tomcat Server and replace the current html/logic with JSP & Servlet.
+Integration of WebSocket with current operations.
+1. Get Login/Logout status
+2. Get new message
 
