@@ -196,14 +196,6 @@ public class PostRequestProcessor extends GlobalResources {
 	 * @return
 	 */
 	public String logout(String token) {
-		for (int i = 0; i < USER_LIST.size(); i++) {
-			if (USER_LIST.get(i).getToken().equals(token)) {
-				System.out.println("1 User is logged out: " + USER_LIST.get(i).getRealName() + "("
-						+ USER_LIST.get(i).getLoginId() + ")");
-				USER_LIST.remove(i);
-				return CommonResources.RESPONSE_SUCCESS;
-			}
-		}
-		return CommonResources.RESPONSE_ERROR;
+		return CommonResources.RESPONSE_SUCCESS;
 	}
 }
