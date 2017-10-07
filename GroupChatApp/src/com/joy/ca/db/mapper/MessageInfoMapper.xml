@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='com.joy.ca.db.dao.MessageInfoDAO'>
+
+	<select id='selectAllmessages' resultMap='MessageInfo'>
+		SELECT
+			m.*
+		FROM
+			message_info m
+	</select>
+	
+	<select id='selectMessageById' parameterType='long' resultMap='MessageInfo'>
+		SELECT
+			m.*
+		FROM
+			message_info m
+		WHERE
+			m.message_id = #{messageId}
+	</select>
+	
+	<resultMap type='MessageView' id='MessageInfo'>
+		<id property='messageId' column='message_id' />
+		<result property='senderId' column='sender_id' />
+		<result property='senderName' column='sender_name' />
+		<result property='receiverId' column='receiver_id' />
+		<result property='message' column='message' />
+		<result property='sentAt' column='sent_at' />
+	</resultMap>
+</mapper>

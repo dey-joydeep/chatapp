@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='com.joy.ca.db.dao.LoginDAO'>
+	
+	<select id="getAuthenticationData" parameterType="java.lang.Object" resultMap="LoginResult">
+		SELECT
+			l.id,
+			l.password
+		FROM
+			login l
+		JOIN users u 
+		ON u.login_id = l.id
+		WHERE
+			(l.email = #{userId} OR u.username = #{userId})
+		AND l.active IS TRUE
+	</select>
+	
+	<update id="updateLastLogin" parameterType="long">
+		UPDATE
+			login l
+		SET
+			l.last_login_at = NOW()
+		WHERE
+			l.id = #{id}
+		AND l.active IS TRUE
+	</update>
+	
+	<update id="updateLastOnline" parameterType="long">
+		UPDATE
+			login l
+		SET
+			l.last_online_at = NOW()
+		WHERE
+			l.id = #{id}
+		AND l.active IS TRUE
+	</update>
+	
+	<resultMap type='Login' id='LoginResult'>
+		<id property='id' column='id' />
+		<result property='email' column='email' />
+		<result property='password' column='password' />
+		<result property='active' column='active' />
+		<result property='createdAt' column='created_at' />
+		<result property='updatedAt' column='updated_at' />
+		<result property='deletedAt' column='deleted_at' />
+		<result property='lastLoginAt' column='last_login_at' />
+		<result property='lastOnlineAt' column='last_online_at' />
+	</resultMap>
+</mapper>

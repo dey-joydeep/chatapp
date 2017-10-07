@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='com.joy.ca.db.dao.LoginSessionDAO'>
+	
+	<select id='verifyLoginSessionAndGetExpiryDate' parameterType='LoginSession' resultType='java.util.Date'>
+		SELECT
+			ls.session_expiry_date
+		FROM
+			login_sessions ls
+		WHERE
+			ls.login_id   = #{loginId}
+		AND	ls.session_id = #{sessionId}
+	</select>
+	
+	<delete id="deleteLoginSession" parameterType="LoginSession">
+		DELETE ls FROM
+			login_sessions ls
+		WHERE
+			ls.login_id   = #{loginId}
+		AND	ls.session_id = #{sessionId}
+	</delete>
+	
+	<insert id='insertLoginSession' parameterType='LoginSession' >
+		<selectKey keyProperty="sessionId" resultType="java.lang.String" order="BEFORE">
+			SELECT UUID()
+		</selectKey>
+		INSERT INTO
+		login_sessions(
+			session_id,
+			login_id,
+		 	session_expiry_date,
+			device_info,
+			ip_address,
+			last_accessed_at
+		)		 
+		VALUES(
+			#{sessionId},
+			#{loginId},
+			#{sessionExpiryDate},
+			#{deviceInfo},
+			#{ipAddress},
+			#{lastAccessedAt}
+		)
+	</insert>
+	
+	<resultMap type='LoginSession' id='LoginSessionResult'>
+		<id property='sessionId' column='session_id' />
+		<result property='loginId' column='login_id' />
+		<result property='sessionExpiryDate' column='session_expiry_date' />
+		<result property='deviceInfo' column='device_info' />
+		<result property='ipAddress' column='ip_address' />
+		<result property='lastAccessedAt' column='last_accessed_at' />
+	</resultMap>
+</mapper>

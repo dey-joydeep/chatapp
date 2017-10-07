@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC 
+  '-//mybatis.org//DTD Mapper 3.0//EN'
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='com.joy.ca.db.dao.UserInfoDAO'>
+	<select id='getUserInfo' parameterType='long' resultMap='UserInfo'>
+		SELECT
+			u.login_id,
+			u.email,
+			u.username,
+			u.fullname,
+			u.last_login_at
+		FROM
+			user_info u
+		WHERE
+			u.login_id = #{loginId}
+		AND u.active IS TRUE
+	</select>
+	
+	<select id='getFriendList' parameterType='long' resultMap='UserInfo'>
+		SELECT
+			u.login_id,
+			u.email,
+			u.username,
+			u.fullname
+		FROM
+			user_info u
+		WHERE
+			u.login_id != #{loginId}
+		AND u.active IS TRUE
+	</select>
+	
+	<select id='getSenderName' parameterType='long' resultType='String'>
+		SELECT
+			u.fullname
+		FROM
+			user_info u
+		WHERE
+			u.login_id != #{loginId}
+		AND u.active IS TRUE
+	</select>
+
+	<resultMap type='UserView' id='UserInfo'>
+		<id property='loginId' column='login_id' />
+		<result property='email' column='email' />
+		<result property='username' column='username' />
+		<result property='fullname' column='fullname' />
+		<result property='active' column='active' />
+		<result property='lastLoginAt' column='last_login_at' />
+	</resultMap>
+</mapper>

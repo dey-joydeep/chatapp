@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace='com.joy.ca.db.dao.EmojiGroupDAO'>
+	<select id='selectAllEmojiGroup' resultMap='EmojiGroup'>
+		SELECT
+			*
+		FROM
+			emoji_group eg
+		WHERE
+			eg.active IS TRUE
+	</select>
+
+	<resultMap type='EmojiGroup' id='EmojiGroup'>
+		<id property='eGroupId' column='e_group_id' />
+		<result property='eGroupName' column='e_group_name' />
+		<result property='eGroupIcon' column='e_group_icon' />
+		<result property='active' column='active' />
+		<result property='createdAt' column='created_at' />
+		<result property='updatedAt' column='updated_at' />
+		<result property='deletedAt' column='deleted_at' />
+	</resultMap>
+</mapper>

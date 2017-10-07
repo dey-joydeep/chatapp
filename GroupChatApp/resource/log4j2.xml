@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
-    <Properties>
-        <Property name="basePath">C:\logs</Property>
-    </Properties>
- 
-    <Appenders>
-        <RollingFile name="fileLogger" fileName="${basePath}/app-info.log" filePattern="${basePath}/app-info-%d{yyyy-MM-dd}.log">
-            <PatternLayout>
-                <pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</pattern>
-            </PatternLayout>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-            </Policies>
-        </RollingFile>
-    </Appenders>
-    <Loggers>
-        <Logger name="org.joy.crawler" level="ALL" additivity="true">
-            <appender-ref ref="fileLogger" level="debug" />
-        </Logger>
-    </Loggers>
+	<Properties>
+		<Property name="basePath">C:\logs</Property>
+	</Properties>
+
+	<Appenders>
+
+		<!-- Console Appender -->
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<RollingFile name="fileLogger" fileName="${basePath}/app-info.log"
+			filePattern="${basePath}/app-info-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingFile>
+
+	</Appenders>
+	<Loggers>
+
+		<Logger name="com.joy.ca" level="debug" additivity="false">
+			<AppenderRef ref="fileLogger" />
+			<AppenderRef ref="CONSOLE" />
+		</Logger>
+
+		<Root level="INFO">
+			<AppenderRef ref="fileLogger" />
+			<AppenderRef ref="CONSOLE" />
+		</Root>
+
+		<Root level="ERROR">
+			<AppenderRef ref="fileLogger" />
+			<AppenderRef ref="CONSOLE" />
+		</Root>
+
+
+
+	</Loggers>
 </Configuration>

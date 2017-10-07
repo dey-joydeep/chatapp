@@ -1,25 +1,29 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE configuration
-  PUBLIC '-//mybatis.org//DTD Config 3.0//EN'
-  'http://mybatis.org/dtd/mybatis-3-config.dtd'>
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<properties resource='jdbc.properties' />
 	<typeAliases>
 		<!-- Table list start -->
-		<typeAlias type='org.joy.ca.db.entity.table.LoginEntity'
+		<typeAlias type='com.joy.ca.db.entity.table.LoginEntity'
 			alias='Login' />
-		<typeAlias type='org.joy.ca.db.entity.table.MessageEntity'
+		<typeAlias type='com.joy.ca.db.entity.table.LoginSessionEntity'
+			alias='LoginSession' />
+		<typeAlias type='com.joy.ca.db.entity.table.MessageEntity'
 			alias='Message' />
-		<typeAlias type='org.joy.ca.db.entity.table.UsersEntity'
+		<typeAlias type='com.joy.ca.db.entity.table.UsersEntity'
 			alias='Users' />
-		<typeAlias type='org.joy.ca.db.entity.table.EmojiGroupEntity'
+		<typeAlias type='com.joy.ca.db.entity.table.EmojiGroupEntity'
 			alias='EmojiGroup' />
-		<typeAlias type='org.joy.ca.db.entity.table.EmojiEntity'
+		<typeAlias type='com.joy.ca.db.entity.table.EmojiEntity'
 			alias='Emoji' />
 		<!-- Table list end -->
 		<!-- View list start -->
-		<typeAlias type='org.joy.ca.db.entity.view.UserInfoView'
+		<typeAlias type='com.joy.ca.db.entity.view.UserInfoView'
 			alias='UserView' />
+		<typeAlias type='com.joy.ca.db.entity.view.MessageInfoView'
+			alias='MessageView' />
 		<!-- View list end -->
 	</typeAliases>
 	<environments default='development'>
@@ -30,12 +34,21 @@
 				<property name='url' value='${jdbc.url}' />
 				<property name='username' value='${jdbc.username}' />
 				<property name='password' value='${jdbc.password}' />
+				<property name="poolPingEnabled" value="true" />
+				<property name="poolMaximumActiveConnections" value="50" />
+				<property name="poolMaximumIdleConnections" value="5" />
+				<property name="poolMaximumCheckoutTime" value="10000" />
 			</dataSource>
+
 		</environment>
 	</environments>
 	<mappers>
-		<mapper resource='org/joy/ca/db/mapper/UserInfoMapper.xml' />
-		<mapper resource='org/joy/ca/db/mapper/EmojiGroupMapper.xml' />
-		<mapper resource='org/joy/ca/db/mapper/EmojiMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/LoginMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/LoginSessionMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/UserInfoMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/EmojiGroupMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/EmojiMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/MessageMapper.xml' />
+		<mapper resource='com/joy/ca/db/mapper/MessageInfoMapper.xml' />
 	</mappers>
 </configuration>
