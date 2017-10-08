@@ -1,14 +1,7 @@
 # chatapp
-A simple chat app for Group Chat, using jQuery Ajax GET request and custom server in Java.
-The application allows the chat in one single group. As it is based on AJAX, the server is called asynchronusly for below two purpose-
-1. Request new message (1 request/sec)
-2. Check user status (Online/Offline) (1 request/4 sec)
+A simple web application for chat, developed in Java, based on JSP-Servlet and Web Socket.
 
-This two processes run seperately from two different WebWorkers.
-The application is runnable particualarly in Chrome. (Not supported in IE, Not tested in Firefox and Safari)
+The application is presently in development phase and require to improve present functionalities and add new.
+Technologies used for this development is described in Wiki page.
 
-Branch Purpose:
-Integration of WebSocket with current operations.
-1. Get Login/Logout status
-2. Get new message
 
