@@ -102,7 +102,6 @@ public class PostRequestProcessor {
 				errMesg = FormValidator.validateLoginForm(formData);
 				if (errMesg == null) {
 					LoginEntity entity = loginService.getAuthenticationData(formData.get(Commons.ReqParams.USER_ID));
-					if (CryptoUtils.verifyPassword(formData.get(Commons.ReqParams.PASSWORD), entity.getPassword()))
 					if (entity != null) {
 						String password = formData.get(Commons.ReqParams.PASSWORD);
 						if (CryptoUtils.verifyPassword(password, entity.getPassword()))
