@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Package xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_x-T2YKdrEeeM8uGEl2LJqQ" name="com.joy.ca" URI="">
+  <packagedElement xmi:type="uml:Package" xmi:id="_FbRlYKdsEeeM8uGEl2LJqQ" name="beans"/>
+  <packagedElement xmi:type="uml:Package" xmi:id="_Jp9MUKdsEeeM8uGEl2LJqQ" name="controller">
+    <packagedElement xmi:type="uml:Package" xmi:id="_MeUKUKdsEeeM8uGEl2LJqQ" name="servlet"/>
+    <packagedElement xmi:type="uml:Package" xmi:id="_OpfocKdsEeeM8uGEl2LJqQ" name="websocket"/>
+  </packagedElement>
+</uml:Package>
