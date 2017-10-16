@@ -1,204 +1,294 @@
 <!DOCTYPE html>
 <html>
+<head>
+<title>ChatApp::Site Flow</title>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<style>
+body {
+	font-family: Menlo, Consolas, monospace;
+	color: #444;
+}
 
+.item {
+	cursor: pointer;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+ul {
+	padding-left: 1em;
+	line-height: 1.5em;
+}
+</style>
+</head>
 <body>
-<b><u>ChatApp Hierarchy</u></b>
-<ul>
-   <li>
-      Pre-Login Screens
-      <ul>
-         <li>
-            Login
-            <ul>
-               <li>Verification Pending</li>
-               <li>Deactivated Account</li>
-            </ul>
-         </li>
-         <li>
-            Signup
-            <ul>
-               <li>Welcome Message</li>
-               <li>User action</li>
-            </ul>
-         </li>
-         <li>
-            Forgot Password
-            <ul>
-               <li>Code Input</li>
-            </ul>
-         </li>
-      </ul>
-   </li>
-   <li>
-      Post-Login Screens
-      <ul>
-         <li>
-            Chat Window
-            <ul>
-               <li>
-                  Users Panel
-                  <ul>
-                     <li>User List</li>
-                     <li>Search Friends</li>
-                     <li>Search Criteria</li>
-                     <li>Search Results</li>
-                  </ul>
-               </li>
-               <li>
-                  Message Panel
-                  <ul>
-                     <li>
-                        Message Display Area
-                        <ul>
-                           <li>
-                              Message Options
-                              <ul>
-                                 <li>Delete Message</li>
-                                 <li>Delete Conversation</li>
-                                 <li>Archive Conversation</li>
-                                 <li>Show Online/Offline</li>
-                                 <li>Show/Hide Last Seen</li>
-                                 <li>Show/Hide Message Receipt</li>
-                                 <li>Download Conversation</li>
-                              </ul>
-                           </li>
-                           <li>Message Content</li>
-                        </ul>
-                     </li>
-                     <li>
-                        Message Input Area
-                        <ul>
-                           <li>Text Input</li>
-                           <li>Emoji Input</li>
-                           <li>Enter Control</li>
-                           <li>Send</li>
-                           <li>Display Typing Status</li>
-                           <li>Audio Input*</li>
-                           <li>Audio Chat*</li>
-                           <li>Video Input*</li>
-                           <li>Video Chat*</li>
-                           <li>Transfer File*</li>
-                        </ul>
-                     </li>
-                     <li>Search Messages</li>
-                     <li>Search Criteria</li>
-                     <li>Search Results</li>
-                  </ul>
-               </li>
-               <li>
-                  Summary Panel
-                  <ul>
-                     <li>
-                        User Info Area
-                        <ul>
-                           <li>Link to Profile</li>
-                           <li>Unfriend</li>
-                        </ul>
-                     </li>
-                     <li>
-                        Message Summary Area
-                        <ul>
-                           <li>Message Summary</li>
-                        </ul>
-                     </li>
-                  </ul>
-               </li>
-               <li>
-                  Control Panel
-                  <ul>
-                     <li>
-                        Settings Options
-                        <ul>
-                           <li>
-                              Account
-                              <ul>
-                                 <li>Suspend</li>
-                                 <li>Delete</li>
-                              </ul>
-                           </li>
-                           <li>
-                              General
-                              <ul>
-                                 <li>User name</li>
-                                 <li>Email ID</li>
-                                 <li>Phone Number</li>
-                              </ul>
-                           </li>
-                           <li>
-                              Security
-                              <ul>
-                                 <li>Change Password</li>
-                                 <li>Set/Change Security Questions</li>
-                                 <li>Review Saved Devices</li>
-                                 <li>Check Last 10 Login Activity</li>
-                                 <li>2-Step Verification*</li>
-                              </ul>
-                           </li>
-                           <li>
-                              Privacy
-                              <ul>
-                                 <li>Blocked User</li>
-                                 <li>Show Online/Offline</li>
-                                 <li>Control Last Seen</li>
-                                 <li>Display Profile Picture</li>
-                                 <li>Control Message Receipt</li>
-                              </ul>
-                           </li>
-                           <li>
-                              Chats
-                              <ul>
-                                 <li>Delete All Chats</li>
-                                 <li>Archive All Chats</li>
-                                 <li>Download All Chats</li>
-                              </ul>
-                           </li>
-                           <li>
-                              Notification
-                              <ul>
-                                 <li>Mute/Unmute All</li>
-                                 <li>Turn on/off In Page Notification</li>
-                                 <li>Turn on/off Email Notification</li>
-                                 <li>Turn on/off SMS Notification</li>
-                              </ul>
-                           </li>
-                        </ul>
-                     </li>
-                     <li>New Message</li>
-                     <li>
-                        Profile
-                        <ul>
-                           <li>Display Profile</li>
-                           <li>Edit Profile</li>
-                        </ul>
-                     </li>
-                  </ul>
-               </li>
-            </ul>
-         </li>
-         <li>
-            Friend's Profile
-            <ul>
-               <li>Friend's Bio</li>
-               <li>Block</li>
-               <li>Join Request</li>
-               <li>Request</li>
-               <li>Unfriend</li>
-            </ul>
-         </li>
-      </ul>
-   </li>
-   <li>
-      Common Screens
-      <ul>
-         <li>Error</li>
-         <li>Terms & Conditions</li>
-         <li>Privacy Policy</li>
-         <li>Contact Us</li>
-         <li>About Us</li>
-         <li>Help</li>
-      </ul>
-   </li>
-</ul>
+	<script type="text/x-template" id="item-template">
+  <li>
+    <div :class="{bold: isFolder}" @click="toggle">
+      {{model.name}}
+      <span v-if="isFolder">[{{open ? '-' : '+'}}]</span>
+    </div>
+    <ul v-show="open" v-if="isFolder">
+      <item class="item" v-for="model in model.children" :model="model"></item>
+    </ul>
+  </li>
+</script>
+	<ul id="dataList">
+		<item class="item" :model="treeData"> </item>
+	</ul>
+	<script>
+		var data = {
+			name : "ChatApp Hierarchy",
+			children : [ {
+				name : "Pre-Login Screens",
+				children : [ {
+					name : "Login",
+					children : [ {
+						name : "Verification Pending"
+					}, {
+						name : "Deactivated Account"
+					} ]
+				}, {
+					name : "Signup",
+					children : [ {
+						name : "Welcome Message"
+					}, {
+						name : "User action"
+					} ]
+				}, {
+					name : "Forgot Password",
+					children : [ {
+						name : "Code Input"
+					} ]
+				} ]
+			}, {
+				name : "Post-Login Screens",
+				children : [ {
+					name : "Chat Window",
+					children : [ {
+						name : "Users Panel",
+						children : [ {
+							name : "User List"
+						}, {
+							name : "Search Friends"
+						}, {
+							name : "Search Criteria"
+						}, {
+							name : "Search Results"
+						} ]
+					}, {
+						name : "Message Panel",
+						children : [ {
+							name : "Message Display Area",
+							children : [ {
+								name : "Message Options",
+								children : [ {
+									name : "Delete Message"
+								}, {
+									name : "Delete Conversation"
+								}, {
+									name : "Archive Conversation"
+								}, {
+									name : "Show Online/Offline"
+								}, {
+									name : "Show/Hide Last Seen"
+								}, {
+									name : "Show/Hide Message Receipt"
+								}, {
+									name : "Download Conversation"
+								} ]
+							}, {
+								name : "Message Content"
+							} ]
+						}, {
+							name : "Message Input Area",
+							children : [ {
+								name : "Text Input"
+							}, {
+								name : "Emoji Input"
+							}, {
+								name : "Enter Control"
+							}, {
+								name : "Send"
+							}, {
+								name : "Display Typing Status"
+							}, {
+								name : "Audio Input*"
+							}, {
+								name : "Audio Chat*"
+							}, {
+								name : "Video Input*"
+							}, {
+								name : "Video Chat*"
+							}, {
+								name : "Transfer File*"
+							} ]
+						}, {
+							name : "Search Messages"
+						}, {
+							name : "Search Criteria"
+						}, {
+							name : "Search Results"
+						} ]
+					}, {
+						name : "Summary Panel",
+						children : [ {
+							name : "User Info Area",
+							children : [ {
+								name : "Link to Profile"
+							}, {
+								name : "Unfriend"
+							} ]
+						}, {
+							name : "Message Summary Area",
+							children : [ {
+								name : "Message Summary"
+							} ]
+						} ]
+					}, {
+						name : "Control Panel",
+						children : [ {
+							name : "Settings Options",
+							children : [ {
+								name : "Account",
+								children : [ {
+									name : "Suspend"
+								}, {
+									name : "Delete"
+								} ]
+							}, {
+								name : "General",
+								children : [ {
+									name : "User name"
+								}, {
+									name : "Email ID"
+								}, {
+									name : "Phone Number"
+								} ]
+							}, {
+								name : "Security",
+								children : [ {
+									name : "Change Password"
+								}, {
+									name : "Set/Change Security Questions"
+								}, {
+									name : "Review Saved Devices"
+								}, {
+									name : "Check Last 10 Login Activity"
+								}, {
+									name : "2-Step Verification*"
+								} ]
+							}, {
+								name : "Privacy",
+								children : [ {
+									name : "Blocked User"
+								}, {
+									name : "Show Online/Offline"
+								}, {
+									name : "Control Last Seen"
+								}, {
+									name : "Display Profile Picture"
+								}, {
+									name : "Control Message Receipt"
+								} ]
+							}, {
+								name : "Chats",
+								children : [ {
+									name : "Delete All Chats"
+								}, {
+									name : "Archive All Chats"
+								}, {
+									name : "Download All Chats"
+								} ]
+							}, {
+								name : "Notification",
+								children : [ {
+									name : "Mute/Unmute All"
+								}, {
+									name : "Turn on/off In Page Notification"
+								}, {
+									name : "Turn on/off Email Notification"
+								}, {
+									name : "Turn on/off SMS Notification"
+								} ]
+							} ]
+						}, {
+							name : "New Message"
+						}, {
+							name : "Profile",
+							children : [ {
+								name : "Display Profile"
+							}, {
+								name : "Edit Profile"
+							} ]
+						} ]
+					} ]
+				}, {
+					name : "Friend's Profile",
+					children : [ {
+						name : "Friend's Bio"
+					}, {
+						name : "Block"
+					}, {
+						name : "Join Request"
+					}, {
+						name : "Request"
+					}, {
+						name : "Unfriend"
+					} ]
+				} ]
+			}, {
+				name : "Common Screens",
+				children : [ {
+					name : "Error"
+				}, {
+					name : "Terms & Conditions"
+				}, {
+					name : "Privacy Policy"
+				}, {
+					name : "Contact Us"
+				}, {
+					name : "About Us"
+				}, {
+					name : "Help"
+				} ]
+			} ]
+		};
+
+		// define the item component
+		Vue.component('item', {
+			template : '#item-template',
+			props : {
+				model : Object
+			},
+			data : function() {
+				return {
+					open : false
+				}
+			},
+			computed : {
+				isFolder : function() {
+					return this.model.children && this.model.children.length
+				}
+			},
+			methods : {
+				toggle : function() {
+					if (this.isFolder) {
+						this.open = !this.open
+					}
+				}
+			}
+		});
+
+		var dataList = new Vue({
+			el : '#dataList',
+			data : {
+				treeData : data
+			}
+		});
+	</script>
 </body>
 
 </html>
